@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration status="WARN" monitorInterval="300"> <!-- status：表示log4j2本身（非java代码）的日志信息打印级别 -->
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+        </Console>
+
+        <NoSql name="databaseAppender">
+            <MongoDb databaseName="test" collectionName="errorlog"
+                     server="localhost" port="27017" />
+        </NoSql>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="mongodblog" level="trace" additivity="true">
+            <AppenderRef ref="databaseAppender" />
+        </Logger>
+        <Root level="error">
+            <AppenderRef ref="Console" />
+        </Root>
+    </Loggers>
+</Configuration>

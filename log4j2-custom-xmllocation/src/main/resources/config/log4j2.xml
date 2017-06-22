@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration status="WARN" monitorInterval="300"> <!-- status：表示log4j2本身（非java代码）的日志信息打印级别，monitorInterval属性，含义是每隔300秒重新读取配置文件，可以不重启应用的情况下修改配置 -->
+
+    <!-- 定义了两个常量方便后面复用 -->
+    <properties>
+        <property name="LOG_HOME">C:/tmp/logs</property>
+        <property name="FILE_NAME">app</property>
+    </properties>
+
+    <!-- Appenders配置：日志的输出目的地 -->
+    <Appenders>
+        <!-- 类型为Console的Appender：输出到控制台 -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" /><!-- 输出日志时的格式 -->
+        </Console>
+
+        <!-- 自定义Appender：File类型的Appender -->
+        <File name="MyFile" fileName="${LOG_HOME}/${FILE_NAME}.log">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+        </File>
+
+    </Appenders>
+
+    <!-- Logger的配置：在代码中可以根据需要选用不同的Logger：LogManager.getLogger(name) -->
+    <Loggers>
+        <!-- Root Logger -->
+        <Root level="error">
+            <AppenderRef ref="Console" />
+        </Root>
+
+        <!-- 自定义Logger -->
+        <!-- additivity="false"表示在该logger中输出的日志不会再延伸到父层logger。这里如果改为true，则会延伸到Root Logger，遵循Root Logger的配置也输出一次。-->
+        <Logger name="mylog" level="trace" additivity="true">
+            <AppenderRef ref="MyFile" />
+        </Logger>
+    </Loggers>
+
+</Configuration>
